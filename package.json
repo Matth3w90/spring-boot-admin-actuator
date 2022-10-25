@@ -1,0 +1,23 @@
+{
+  "name": "spring-boot-admin-actuator",
+  "version": "0.0.1",
+  "description": "A package that provides a set of APIs used by spring-boot-admin to view the state of the microservice by registering with eureka server.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": [
+    "spring-boot-admin",
+    "sba",
+    "actuator",
+    "eureka"
+  ],
+  "author": {
+    "name": "matteo velletrani",
+    "email": "matteo@matteovelletrani.it"
+  },
+  "license": "ISC"
+}
