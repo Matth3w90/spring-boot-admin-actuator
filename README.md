@@ -160,7 +160,7 @@ app.use(sbaActuator(options));
 ```
 
 > **_IMPORTANT:_**
->1. The data structure "contexts": { "application": {}} are inserted automatically by the SB
+>1. The data structure "contexts": { "application": {}} are added automatically by the SB
 
 ### logfile
 ```plain/text
