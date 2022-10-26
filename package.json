@@ -19,5 +19,9 @@
     "name": "matteo velletrani",
     "email": "matth3w_90@live.it"
   },
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Matth3w90/spring-boot-admin-actuator.git"
+  },
+  "license": "MIT"
 }
