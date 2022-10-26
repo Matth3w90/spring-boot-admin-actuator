@@ -44,18 +44,11 @@ $ npm install --save spring-boot-admin-actuator
 
 ## Usage
 
-```js
-const sbaActuator = require('spring-boot-admin-actuator');
-const app = express();
-
-app.use(sbaActuator());
-```
-
-## Configuring configProps endpoint.
 
 By passing a configuration object this will be used in all the sba endpoints.
 
 ## Mandatory Properties:
+
 
 API | Description
 --- | ---
@@ -70,6 +63,7 @@ const options = {
 
 app.use(sbaActuator(options));
 ```
+
 
 > **_IMPORTANT:_** To get this information the middleware have some sort of logic:
 >1. When the express app is executed with ```node app.js``` or ```npm start``` the module will look for a file named package.json where the node command was launched.
