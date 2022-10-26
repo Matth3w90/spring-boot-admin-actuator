@@ -21,8 +21,6 @@ Table of Contents
     - [health](#health)
     - [actuator](#actuator)
     - [configprops](#configprops)
-  - [Application Information](#application-information)
-    - [Git Commit Information](#git-commit-information)
 
 <!-- tocstop -->
 
@@ -44,7 +42,6 @@ $ npm install --save spring-boot-admin-actuator
 
 ## Usage
 
-
 By passing a configuration object this will be used in all the sba endpoints.
 
 ## Mandatory Properties:
@@ -55,6 +52,8 @@ API | Description
 `configurationObject.logFileAddr` | valued with phisical path of log to be sended to SBA
 `configurationObject.ipAddr` | valued with ip of the service
 `configurationObject.port` | valued with the port of the service
+
+### example initialization:
 
 ```js
 const options = {
@@ -154,7 +153,7 @@ app.use(sbaActuator(options));
 ```
 
 > **_IMPORTANT:_**
->1. The data structure "contexts": { "application": {}} are added automatically by the SB
+>1. The data structure "contexts": { "application": {}} are added automatically by the SBA
 
 ### logfile
 ```plain/text
