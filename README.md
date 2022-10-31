@@ -1,6 +1,6 @@
 # Spring-Boot-Admin-Actuator
 
-![screenshot](https://i.im.ge/2022/10/31/2WzoRq.sba.png)
+![screenshot](https://www.matteovelletrani.it/img/readme/sba.png)
 
 A package that provides a set of APIs used by spring-boot-admin to view the state of the microservice by registering with eureka server.
 
@@ -79,7 +79,7 @@ const mappingsDocument = require('./path/to/mappings.json')
 
 const options = {
     config: configurationObject,
-    mappings: mappingDocument // NOT MANDATORY activate the mappings tab
+    mappings: mappingDocument, // NOT MANDATORY activate the mappings tab
 	metricsIsActive: true, // NOT MANDATORY activate the metrics tab
     environmentIsActive: true // NOT MANDATORY activate the environment tab
 };
@@ -264,7 +264,7 @@ Where the property mappings is not mandatory but if valued with mappings.json (o
 
 ### mappings
 
-![screenshot](https://i.im.ge/2022/10/31/2WzT9C.mappings.png)
+![screenshot](https://www.matteovelletrani.it/img/readme/mappings.png)
 
 > **_IMPORTANT:_**
 >1. for this endpoint the library needs to add the mapping property as well as the configurationObject (which is mandatory).
@@ -273,7 +273,7 @@ Where the property mappings is not mandatory but if valued with mappings.json (o
 
 Starting with version 1.1 with the support of the metrics (if enabled) the library adds the display of the process life time directly on the SBA.
 
-![screenshot](https://i.im.ge/2022/10/31/2WzQu4.uptime.png)
+![screenshot](https://www.matteovelletrani.it/img/readme/uptime.png)
 
 In combination with reading environment variables (if enabled) the process PID will also be shown.
 
