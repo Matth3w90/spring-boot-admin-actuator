@@ -2,7 +2,7 @@
 
 ![screenshot](https://www.matteovelletrani.it/img/readme/sba.png)
 
-A package that provides a set of APIs used by spring-boot-admin to view the state of the microservice by registering with eureka server.
+A package that provides a set of APIs used by spring-boot-admin to view the microservices state by registering with eureka server.
 
 
 Table of Contents
@@ -41,7 +41,7 @@ API | Description
 `actuator` | Shows middleware api.
 `configprops` | Shows application configuration.
 
-Starting with version 1.1.0 the library will enable three more tabs on the SBA: mappings, metrics and env.
+Starting with version 1.1.0 the library enables three more tabs on the SBA: mappings, metrics and env.
 
 API | Description
 --- | ---
@@ -56,18 +56,20 @@ $ npm install --save spring-boot-admin-actuator
 ```
 
 ## Usage
-
-To use this library you must pass as parameter an object that has inside the configurations that you want to show in tab "Configuration Properties" of the SBA and especially the mandatory properties for the correct functioning of the other APIs offered by the library, such as /actuator and /logfile
+First you should create the `configurationObject`, at least with the **mandatory** properties. The **optional** properties configure what you want to show in the SBA.
+If the `configurationObject` is not properly configured the APIs (ie `/actuator` and `/logfile`) will not function correctly.
+<!-- TODO I dont know if it happens already but API should raise an ERROR/WARNING in the case it is not properly configured. -->
 
 
 ## Mandatory Properties:
 
 
 Property | Description
+<!-- TODO Maybe add an example on how to create  configurationObject here?-->
 --- | ---
-`configurationObject.logFileAddr` | valued with phisical path of log to be sended to SBA
-`configurationObject.ipAddr` | valued with ip of the service
-`configurationObject.port` | valued with the port of the service
+`configurationObject.logFileAddr` | log filepath sent to SBA
+`configurationObject.ipAddr` | service ip 
+`configurationObject.port` | service port
 
 ### Example Initialization:
 
@@ -79,15 +81,15 @@ const mappingsDocument = require('./path/to/mappings.json')
 
 const options = {
     config: configurationObject,
-    mappings: mappingDocument, // NOT MANDATORY activate the mappings tab
-	metricsIsActive: true, // NOT MANDATORY activate the metrics tab
-    environmentIsActive: true // NOT MANDATORY activate the environment tab
+    mappings: mappingDocument, // OPTIONAL activate the mappings tab
+	metricsIsActive: true, // OPTIONAL activate the metrics tab
+    environmentIsActive: true // OPTIONAL activate the environment tab
 };
 
 app.use(sbaActuator(options));
 ```
-
-Where the property mappings is not mandatory but if valued with mappings.json (of which you can find an example later) will enable the tab mappings on the SBA.
+<!-- TODO not clear what this means -->
+When the property mappings are not mandatory but if valued with mappings.json (of which you can find an example later) will enable the tab mappings on the SBA.
 
 ## mapping-json
 
@@ -171,7 +173,7 @@ Where the property mappings is not mandatory but if valued with mappings.json (o
 }
 ```
 
-> **_IMPORTANT:_** To get this information the middleware have some sort of logic:
+> **_IMPORTANT:_** To get this information the middleware has some sort of logic:
 >1. When the express app is executed with ```node app.js``` or ```npm start``` the module will look for a file named package.json where the node command was launched.
 
 ### health
