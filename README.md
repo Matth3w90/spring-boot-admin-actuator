@@ -2,8 +2,10 @@
 
 ![screenshot](https://www.matteovelletrani.it/img/readme/sba.png)
 
-A package that provides a set of APIs used by spring-boot-admin to view the state of the microservice by registering with eureka server.
+A package that provides a set of APIs used by spring-boot-admin to view the state of the microservice.
 
+> **_IMPORTANT:_**
+>This package does not directly register with eureka, so please refer to the [eureka-js-client](https///www.npmjs.com/package/eureka-js-client) package to register.
 
 Table of Contents
 =================
@@ -11,13 +13,13 @@ Table of Contents
 <!-- toc -->
 
 - [Spring-Boot-Admin-Actuator](#spring-boot-admin-actuator)
-- [Table of Contents](#table-of-contents)
-  - [Endpoints](#endpoints)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Configuring](#configuring)
-    - [Mappings API configuration JSON](#mapping-json)
-  - [Endpoints Examples](#endpoints-examples)
+- [Latest release news](#latest-release)
+- [Endpoints](#endpoints)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuring](#configuring)
+- [Mappings API configuration JSON](#mapping-json)
+- Endpoints Examples
     - [info](#info)
     - [logfile](#logfile)
     - [health](#health)
@@ -28,6 +30,12 @@ Table of Contents
 	- [metrics](#metrics)
 - [Creator](#creator)
 
+
+<!-- tocstop -->
+
+## Latest release
+
+Starting with version 1.2.0, configuration keys returned by /env and /configprops will be hidden if the name contains "password" or "apikey"
 
 <!-- tocstop -->
 
@@ -278,6 +286,8 @@ Starting with version 1.1 with the support of the metrics (if enabled) the libra
 In combination with reading environment variables (if enabled) the process PID will also be shown.
 
 The idea is to add more metrics later with new releases.
+
+
 
 ## Creator
 
