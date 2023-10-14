@@ -22,6 +22,7 @@ Table of Contents
 - Endpoints Examples
     - [info](#info)
     - [logfile](#logfile)
+	- [loggers](#loggers)
     - [health](#health)
     - [actuator](#actuator)
     - [configprops](#configprops)
@@ -35,7 +36,8 @@ Table of Contents
 
 ## Latest release
 
-Starting with version 1.2.0, configuration keys returned by /env and /configprops will be hidden if the name contains "password" or "apikey"
+Starting with version 1.3.0, configuration keys returned by /env and /configprops will be hidden if the name contains: "password", "apikey", "secret", "credetial" or "key.
+With 1.3.0 with the support of the loggers tab (if enabled) the library now allow to change the log level at runtime.
 
 <!-- tocstop -->
 
@@ -56,6 +58,12 @@ API | Description
 `mappings` | Shows user defined application api.
 `metrics` | Shows some application metrics.
 `env` | Shows environment configuration.
+
+Starting with version 1.3.0 the library will enable one more tab on SBA: loggers.
+
+API | Description
+--- | ---
+`logger` | Allows you to change the log level at runtime.
 
 ## Installation
 
@@ -90,6 +98,7 @@ const options = {
     mappings: mappingDocument, // NOT MANDATORY activate the mappings tab
 	metricsIsActive: true, // NOT MANDATORY activate the metrics tab
     environmentIsActive: true // NOT MANDATORY activate the environment tab
+	loggersIsActive: true // NOT MANDATORY enable tab loggers, to be used in combination with the global loggerLevel variable, look further ahead for configuration.
 };
 
 app.use(sbaActuator(options));
@@ -286,6 +295,19 @@ Starting with version 1.1 with the support of the metrics (if enabled) the libra
 In combination with reading environment variables (if enabled) the process PID will also be shown.
 
 The idea is to add more metrics later with new releases.
+
+### loggers
+
+Starting with version 1.3 with the support of the loggers tab (if enabled) the library now allow to change the log level at runtime.
+
+Library allows you to manage only the root level of log, to manage the at file/class level is up to you to extends the implementation.
+
+![screenshot](https://www.matteovelletrani.it/img/readme/loggers.png)
+
+> **_IMPORTANT:_**
+>1. for this endpoint your sofware must be set the global variable loggerLevel otherwise will throw an exception. 
+global.loggerLevel = "INFO"
+
 
 
 
