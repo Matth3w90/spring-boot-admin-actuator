@@ -9,11 +9,11 @@ Description
 
 A package that provides a set of APIs used by spring-boot-admin to view the state of the microservice.
 
-To read the latest version of the readme refer to this link [readme latest version](#la)
+To read the latest version of the readme refer to this link [Latest README version](#readme)
 
 This library adds the endpoints invoked by the spring-boot-admin and must be used in conjunction with a library that takes care of the registration on a server-eureka.
 
-**Then please refer to this [package](https///www.npmjs.com/package/eureka-js-client) for registration, it is the one used for creating and testing this library.**
+**Then please refer to package eureka-js-client (https://www.npmjs.com/package/eureka-js-client) for registration, it is the one used for creating and testing this library.**
 
 <br>
 
