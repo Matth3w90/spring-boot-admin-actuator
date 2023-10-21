@@ -1,3 +1,4 @@
+
 # Spring-Boot-Admin-Actuator
 
 ![screenshot](https://www.matteovelletrani.it/img/readme/sba.png)
@@ -9,11 +10,11 @@ Description
 
 A package that provides a set of APIs used by spring-boot-admin to view the state of the microservice.
 
-To read the latest version of the readme refer to this link [Latest README version](#readme)
+To read the latest version of the readme refer to this [link](#readme)
 
 This library adds the endpoints invoked by the spring-boot-admin and must be used in conjunction with a library that takes care of the registration on a server-eureka.
 
-**Then please refer to package eureka-js-client (https://www.npmjs.com/package/eureka-js-client) for registration, it is the one used for creating and testing this library.**
+**Then please refer to this eureka-js-package (https//www.npmjs.com/package/eureka-js-client) for registration, it is the one used for creating and testing this library.**
 
 <br>
 
@@ -32,13 +33,15 @@ Table of Contents
     - [info](#info)
     - [logfile](#logfile)
 	- [loggers](#loggers)
+	   - [1.4.0](#140)
+	   - [1.3.0](#130)
     - [health](#health)
     - [actuator](#actuator)
     - [configprops](#configprops)
 	- [environment](#environment)
 	- [mappings](#mappings)
 	- [metrics](#metrics)
-- [Latest README version](#readme)
+- Latest version of [readme](#readme)
 - [Creator](#creator)
 
 <br>
@@ -47,13 +50,15 @@ Table of Contents
 
 ## Latest release
 
-Version 1.3.0 introduces the following new features:
+Version 1.4.0 introduces the following new features:
 
-Support for the [**loggers**](#loggers) tab to manage the root level of the logs at runtime.
+Added support to configure log level at file level.
+The library contains a logger.js file under the utils folder that you can use to integrate the new functionality introduced.
+This has a custom logger class that integrates perfectly with the new version of the API loggers.
 
-A fix has been introduced on the api logfile to avoid that on the sba the spinner remains displayed in case the log sent is empty,
+If you have already implemented the new API distributed with version 1.3.0 of this library version 1.4.0 continues to work without problems.
 
-"secret", "key" and "credential" have been added to the list of keys that are hidden by the /env and /configprops APIs.
+The "WARN" log level has also been added in the managed levels contained in the LoggerLevels object.
 
 <br>
 <!-- tocstop -->
@@ -139,6 +144,12 @@ app.use(sbaActuator(options));
 <br>
 
 Where the property mappings is not mandatory but if valued with mappings.json (of which you can find an example later) will enable the tab mappings on the SBA.
+
+Starting from version 1.4.0 the API loggers can be initialized in 2 ways:
+
+1 - as described in the above example by passing "loggersIsActive = true" and initializing the global "loggerLevel" variable.
+
+2 - by passing "loggersIsActive = true" and with "loggerMap" map defined in global variables
 
 <br>
 
@@ -396,15 +407,150 @@ In combination with reading environment variables (if enabled) the process PID w
 
 ### loggers
 
+To use Loggers API at least one of global variable 'loggerLevel' (for 1.3.0 compatibility) or 'loggerMap' must be defined (since version 1.4.0)
+
+<br>
+
+#### 1.4.0
+
+<br>
+
+![screenshot](https://www.matteovelletrani.it/img/readme/loggersv2.png)
+
+<br>
+
+
+Since version 1.4.0 the library is distributed with the logger.js file that you can copy and use in your software, you can find it under utils/logger.js
+
+This class integrates perfectly with the innovations introduced in the new version of the API loggers.
+
+The WARN level has also been added to those managed.
+
+#### logger.js
+
+```js
+
+const LEVELS = require('spring-boot-admin-actuator/lib/utils/logger-level').LoggerLevels;
+const {performance} = require('perf_hooks');
+
+const configuredLogLevel = "INFO" // THIS IS AN EXAMPLE, GET THIS DATA FROM YOUR CONFIGURATION
+
+const startLevel = LEVELS[configuredLogLevel].name;
+
+class Logger {
+  constructor(classe) {
+    this.classe = classe ? classe : undefined;
+
+    if(typeof this.classe === 'undefined') {throw new Error("Required class parameter is missing")}
+
+    this.debug = this.debug.bind(this);
+    this.info = this.info.bind(this);
+    this.warn = this.warn.bind(this);
+    this.error = this.error.bind(this);
+    this.writeToConsole = this.writeToConsole.bind(this);
+
+    this.getClass = this.getClasse.bind(this);
+
+    this.setLoggerMap(this.classe);
+
+    this.getEffectiveLevel = this.getEffectiveLevel.bind(this);
+  }
+
+  static getStartTime(){
+    return performance.now();
+  }
+
+  /**
+   * 
+   * @param {*} level: level of the log
+   * @param {*} method: the method that generated the log 
+   * @param {*} message: the message of the log
+   * @param {*} start: a timestamp, if present adds to the messagge the execution time in milliseconds.
+   * 
+   * @returns 2023-10-21T10:51:39.946Z | INFO | message.controller.js | read | END | 45.89750003814697 ms. |
+   */
+  writeToConsole(level, method, message, start) {
+    if (LEVELS[global.loggerMap[this.classe].effectiveLevel].order <= LEVELS[level].order) {
+        const end = start != undefined ?  performance.now() - start : undefined
+        const dateTime = new Date().toISOString();
+        const formattedMessage = dateTime + " | " + level + " | " + this.classe + " | " + method + " | " + message + " | " + (end != undefined ? (end + " ms. |") : "");
+        console[level.toLowerCase()](formattedMessage);
+    }
+  }
+
+  debug(method, message, start) {
+    this.writeToConsole('DEBUG', method, message, start);
+  }
+
+  info(method, message, start) {
+    this.writeToConsole('INFO', method, message, start);
+  }
+
+  warn(method, message, start) {
+    this.writeToConsole('WARN', method, message, start);
+  }
+
+  error(method, message, start) {
+    this.writeToConsole('ERROR', method, message, start);
+  }
+
+  getClasse(){
+    return this.classe;
+  }
+
+  getEffectiveLevel(){
+    return global.loggerMap[classe].effectiveLevel;
+  }
+
+  setLoggerMap(classe){
+    if(typeof global.loggerMap === 'undefined'){
+        global.loggerMap = {
+            "ROOT": {
+                "configuredLevel": startLevel,
+                "effectiveLevel": startLevel
+            }
+        }
+    }
+    global.loggerMap[classe] = {
+        "configuredLevel": startLevel,
+        "effectiveLevel": startLevel
+    }
+  }
+}
+
+module.exports = Logger
+
+
+```
+Each time a logger is instantiated by calling the constructor method, it automatically adds the new logger to the global.loggerMap.
+
+the logger class provided contains the log level control logic relative to the file level, it uses the updated LoggerLevels object present in the library.
+
+Here is an example of using the logger class provided:
+
+```js
+const Logger = require('../../utils/logger');
+const log = new Logger("message.controller.js");
+
+log.debug(method, "message");
+```
+
+<br>
+
+> **_IMPORTANT:_**
+> To use this version of API your software must set the global loggerMap variable.
+
+#### 1.3.0
+
 ![screenshot](https://www.matteovelletrani.it/img/readme/loggers.png)
 
 With version 1.3.0 the library adds the loggers tab that allows you to change the log level at runtime
 
-Automatically the library allows you to manage only the root level of the log, to manage at the file/class level it is up to you to extend the implementation.
+With 1.3.0 automatically the library allows you to manage only the root level of the log.
 
 This API uses the global loggerLevel variable and should be used to allow/inhibit the methods you use to log.
 
-Managed log levels are 4: OFF, DEBUG, INFO and ERROR: internally they are managed through a configuration object (**LoggerLevels**) equal to that shown in the following example.
+Managed log levels are 4: OFF, DEBUG, INFO and ERROR.
 
 An example of usage in combination with custom log methods:
 
@@ -427,7 +573,7 @@ const LoggerLevels = Object.freeze({"OFF":"OFF", "DEBUG":"DEBUG", "INFO":"INFO",
 ```
 <br>
 
-To use it with the most common log libraries (such as Winston) you just need to create wrapper methods that perform in them the control on the set log level and then call the methods of the library used.
+To use it with the most common log libraries (such as Winston or log4js) you just need to create wrapper methods that perform in them the control on the set log level and then call the methods of the library used.
 
 <br>
 
@@ -436,12 +582,12 @@ To use it with the most common log libraries (such as Winston) you just need to 
 
 <br>
 
-## README
+### Readme
 
 Latest readme version: [click here](https://github.com/Matth3w90/spring-boot-admin-actuator#spring-boot-admin-actuator)
 
 <br>
 
-## Creator
+### Creator
 
 [You can find me here](https://www.matteovelletrani.it/)
